@@ -1,0 +1,40 @@
+version: '3.6'
+services:
+    postgres:
+        image: postgres:12
+        ports:
+            - 54322:5432
+        volumes:
+            # - ./postgres:/var/lib/postgresql/data
+            - pgdata:/var/lib/postgresql/data
+            - pgconf:/etc/postgresql
+            - pglog:/var/log/postgresql
+        environment:
+            POSTGRES_PASSWORD: 123456
+            POSTGRES_DB: acheckin_hrm
+    pgadmin:
+        image: dpage/pgadmin4
+        environment:
+            PGADMIN_DEFAULT_EMAIL: admin@appota.com
+            PGADMIN_DEFAULT_PASSWORD: 123456
+        ports:
+            - 8999:80
+    swagger-ui:
+        image: swaggerapi/swagger-ui
+        ports:
+            - 8810:8080
+        volumes:
+            - ./swagger/swagger.json:/swagger/swagger.json
+        environment:
+            - SWAGGER_JSON=/swagger/swagger.json
+    redis:
+        image: redis
+        ports:
+            - 6380:6379
+volumes:
+    pgdata:
+        driver: local
+    pgconf:
+        driver: local
+    pglog:
+        driver: local
